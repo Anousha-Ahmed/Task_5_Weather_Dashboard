@@ -1,4 +1,8 @@
 
+const API_KEY = "6b5fae57936f4c52b4473053261706";
+console.log("API_KEY loaded:", API_KEY ? "Yes" : "No");
+console.log("✅ main.js loaded successfully!");
+
 // RENDER LAYOUT
 const app = document.getElementById("app");
 renderLayout();
