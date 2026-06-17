@@ -1,4 +1,4 @@
-const API_KEY = process.env.API_KEY || "6b5fae57936f4c52b4473053261706";
+const API_KEY = "6b5fae57936f4c52b4473053261706";
 // RENDER LAYOUT
 const app = document.getElementById("app");
 renderLayout();
