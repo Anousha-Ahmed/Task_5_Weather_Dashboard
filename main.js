@@ -1,16 +1,15 @@
-
+// API KEY - Universal (Live Server + Vercel)
 let API_KEY;
-if (typeof config !== 'undefined' && config.API_KEY) {
-    API_KEY = config.API_KEY;
-} 
-else if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-    API_KEY = process.env.API_KEY;
-} 
-else {
-    console.error("❌ API_KEY not found! Please set API_KEY in config.js or Vercel Environment Variables.");
-}
-console.log("API_KEY loaded:", API_KEY ? "✅ Yes" : "❌ No");
 
+if (typeof window.config !== 'undefined' && window.config.API_KEY) {
+    API_KEY = window.config.API_KEY;
+    console.log("✅ API_KEY loaded from config.js (Live Server)");
+} else {
+    API_KEY = "6b5fae57936f4c52b4473053261706";
+    console.log("✅ API_KEY loaded from fallback (Vercel)");
+}
+
+console.log("API_KEY loaded:", API_KEY ? "✅ Yes" : "❌ No");
 
 // RENDER LAYOUT
 const app = document.getElementById("app");
