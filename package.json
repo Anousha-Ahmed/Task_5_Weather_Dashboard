@@ -1,0 +1,12 @@
+{
+    "name": "weather-dashboard",
+    "version": "1.0.0",
+    "description": "Weather Dashboard with WeatherAPI.com",
+    "main": "index.html",
+    "scripts": {
+      "start": "open index.html"
+    },
+    "keywords": ["weather", "dashboard", "weather-api"],
+    "author": "Anousha Ahmed",
+    "license": "MIT"
+  }
