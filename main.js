@@ -1,4 +1,5 @@
 
+
 // RENDER LAYOUT
 const app = document.getElementById("app");
 renderLayout();
@@ -51,6 +52,7 @@ let debounceTimer;
 let tempChart = null;
 let lastSearchedCity = "Karachi";
 let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+
 // DARK MODE
 let isDarkMode = localStorage.getItem("darkMode") === "true";
 function applyDarkMode(isDark) {
@@ -63,9 +65,14 @@ function applyDarkMode(isDark) {
     }
     localStorage.setItem("darkMode", isDark);
     isDarkMode = isDark;
+    
+    if (lastSearchedCity) {
+        getForecast(lastSearchedCity);
+    }
 }
 applyDarkMode(isDarkMode);
 darkModeBtn.addEventListener("click", () => { applyDarkMode(!isDarkMode); });
+
 // TOAST
 function showToast(message, type = "info") {
     const colors = {
@@ -90,6 +97,7 @@ function showToast(message, type = "info") {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
+
 // FORMAT TIME WITH AM/PM
 function formatTime(timeStr) {
     const date = new Date(timeStr);
@@ -99,6 +107,7 @@ function formatTime(timeStr) {
     hours = hours % 12 || 12;
     return `${hours}:${minutes} ${ampm}`;
 }
+
 // WEATHER CARD
 function renderCurrentWeather(data) {
     const weatherCard = document.getElementById("weatherCard");
@@ -161,6 +170,7 @@ function renderCurrentWeather(data) {
         showToast(`${city} added to favourites`, "success");
     });
 }
+
 // SKELETON
 function showForecastSkeleton() {
     const forecastContainer = document.getElementById("forecastContainer");
@@ -187,6 +197,7 @@ function showWeatherSkeleton() {
         </div>
     `;
 }
+
 // WEATHER API
 async function getWeather(city) {
     try {
@@ -205,6 +216,7 @@ async function getWeather(city) {
         showToast("City not found. Please try again.", "error");
     }
 }
+
 // FORECAST
 async function getForecast(city) {
     try {
@@ -235,14 +247,18 @@ function renderForecast(data) {
     });
     forecastContainer.innerHTML = html;
 }
-// CHART
+
+// render chart
 function renderChart(data) {
     const ctx = document.getElementById("tempChart");
     const hours = data.forecast.forecastday[0].hour.slice(0, 8);
     const labels = hours.map(h => formatTime(h.time));
     const temps = hours.map(h => h.temp_c);
     if (tempChart) tempChart.destroy();
+    
+
     const isDark = document.documentElement.classList.contains("dark");
+    
     tempChart = new Chart(ctx, {
         type: "line",
         data: {
@@ -268,24 +284,35 @@ function renderChart(data) {
             plugins: {
                 legend: {
                     labels: {
-                        color: isDark ? "white" : "#1e293b",
+                        color: isDark ? "#ffffff" : "#1e293b",
                         font: { size: 14, weight: "bold" }
                     }
                 }
             },
             scales: {
                 x: {
-                    ticks: { color: isDark ? "white" : "#1e293b" },
-                    grid: { color: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" }
+                    ticks: { 
+                        color: isDark ? "#ffffff" : "#1e293b",
+                        font: { size: 12 }
+                    },
+                    grid: { 
+                        color: isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)" 
+                    }
                 },
                 y: {
-                    ticks: { color: isDark ? "white" : "#1e293b" },
-                    grid: { color: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" }
+                    ticks: { 
+                        color: isDark ? "#ffffff" : "#1e293b",
+                        font: { size: 12 }
+                    },
+                    grid: { 
+                        color: isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)" 
+                    }
                 }
             }
         }
     });
 }
+
 // FAVOURITES
 function renderFavourites() {
     const savedCities = document.getElementById("savedCities");
@@ -325,6 +352,7 @@ function renderFavourites() {
     });
 }
 renderFavourites();
+
 // GEOLOCATION
 locationBtn.addEventListener("click", () => {
     showToast("Fetching your location...", "info");
@@ -352,6 +380,7 @@ locationBtn.addEventListener("click", () => {
         }
     );
 });
+
 // RETRY BUTTON
 const retryBtn = document.getElementById("retryBtn");
 retryBtn.addEventListener("click", () => {
@@ -364,6 +393,7 @@ retryBtn.addEventListener("click", () => {
         showToast("Please enter a city name", "warning");
     }
 });
+
 // SEARCH
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("input", () => {
