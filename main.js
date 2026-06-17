@@ -355,15 +355,34 @@ renderFavourites();
 // GEOLOCATION
 locationBtn.addEventListener("click", () => {
     showToast("Fetching your location...", "info");
+    console.log("📍 Location button clicked");
+    
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
+        showToast("Geolocation not supported by your browser", "error");
+        return;
+    }
+    
+    // Geolocation options
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 30000,      // 30 seconds (default 10 seconds)
+        maximumAge: 60000    // 1 minute cache
+    };
+    
     navigator.geolocation.getCurrentPosition(
+        // Success Callback
         async (position) => {
+            console.log("Position received");
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
+            console.log(`📍 Lat: ${lat}, Lon: ${lon}`);
+            
             try {
                 showWeatherSkeleton();
                 showForecastSkeleton();
                 const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat},${lon}`);
-                if (!response.ok) throw new Error();
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 renderCurrentWeather(data);
                 const cityName = data.location.name;
@@ -371,12 +390,24 @@ locationBtn.addEventListener("click", () => {
                 lastSearchedCity = cityName;
                 showToast("Location weather loaded", "success");
             } catch (error) {
+                console.error("API Error:", error);
                 showToast("Unable to fetch location weather", "error");
             }
         },
-        () => {
-            showToast("Location access denied. Please search manually.", "error");
-        }
+        //Error Callback
+        (error) => {
+            console.error("Geolocation Error:", error);
+            let message = "Location access denied. Please search manually.";
+            if (error.code === 1) {
+                message = "Location access denied. Please search manually.";
+            } else if (error.code === 2) {
+                message = "Location unavailable. Please check your GPS.";
+            } else if (error.code === 3) {
+                message = "Location timeout. Please try again or search manually.";
+            }
+            showToast(message, "error");
+        },
+        options  // 30 seconds timeout
     );
 });
 
