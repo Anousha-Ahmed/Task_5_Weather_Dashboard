@@ -1,4 +1,20 @@
-const API_KEY = "6b5fae57936f4c52b4473053261706";
+// API KEY - Local aur Vercel dono ke liye
+let API_KEY;
+
+// Agar config.js available hai (Local Live Server)
+if (typeof config !== 'undefined' && config.API_KEY) {
+    API_KEY = config.API_KEY;
+} 
+// Agar Vercel Environment Variable available hai
+else if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+    API_KEY = process.env.API_KEY;
+} 
+// Fallback (agar kuch na ho)
+else {
+    API_KEY = "6b5fae57936f4c52b4473053261706"; // Direct key (last option)
+}
+
+console.log("API_KEY loaded:", API_KEY ? "✅ Yes" : "❌ No");
 // RENDER LAYOUT
 const app = document.getElementById("app");
 renderLayout();
