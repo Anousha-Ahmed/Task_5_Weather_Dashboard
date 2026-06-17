@@ -1,5 +1,23 @@
 
+// ======================
+// API KEY (Safe - Vercel Env + Local Fallback)
+// ======================
+let API_KEY;
 
+// Local development (Live Server)
+if (typeof config !== 'undefined' && config.API_KEY) {
+    API_KEY = config.API_KEY;
+} 
+// Vercel Environment Variable
+else if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+    API_KEY = process.env.API_KEY;
+} 
+// Fallback (only for local testing - NEVER push this with real key!)
+else {
+    API_KEY = "YOUR_LOCAL_TEST_KEY";  // ← Yeh local ke liye, GitHub par nahi jana chahiye
+}
+
+console.log("API_KEY loaded:", API_KEY ? "✅ Yes" : "❌ No");
 // RENDER LAYOUT
 const app = document.getElementById("app");
 renderLayout();
@@ -393,7 +411,6 @@ retryBtn.addEventListener("click", () => {
         showToast("Please enter a city name", "warning");
     }
 });
-
 // SEARCH
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("input", () => {
